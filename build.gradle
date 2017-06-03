@@ -13,7 +13,7 @@ plugins {
 }
 
 repositories {
-  maven { url "https://plugins.gradle.org/m2/" }
+  jcenter()
 }
 
 apply from: rootProject.file("gradle/versions.gradle")
@@ -26,12 +26,11 @@ sourceCompatibility = ext.sourceCompatibilityVersion
 targetCompatibility = ext.sourceCompatibilityVersion
 
 dependencies {
-  compile localGroovy()
-  compile gradleApi()
+  implementation localGroovy()
 
-  testCompile deps.gradle
-  testCompile deps.kotlinGradlePlugin
-  testCompile deps.spockCore, { exclude module: "groovy-all" } // Use localGroovy()
+  testImplementation deps.gradle
+  testImplementation deps.kotlinGradlePlugin
+  testImplementation deps.spockCore, { exclude module: "groovy-all" } // Use localGroovy()
 }
 
 // Ordering matters

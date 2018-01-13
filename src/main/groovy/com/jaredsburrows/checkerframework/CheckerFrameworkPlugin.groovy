@@ -48,6 +48,8 @@ final class CheckerFrameworkPlugin implements Plugin<Project> {
       throw new IllegalStateException("Checker plugin only supports Java 7 and Java 8 projects.")
     }
 
+    def userConfig = project.extensions.create('checkerFramework', CheckerConfiguration)
+
     // Create a map of the correct configurations with dependencies
     def dependencyMap = [
       [name: "$ANNOTATED_JDK_CONFIGURATION", descripion: "$ANNOTATED_JDK_CONFIGURATION_DESCRIPTION"]: "org.checkerframework:$jdkVersion:$LIBRARY_VERSION",
@@ -84,10 +86,12 @@ final class CheckerFrameworkPlugin implements Plugin<Project> {
     project.gradle.projectsEvaluated {
       project.tasks.withType(AbstractCompile).all { compile ->
         compile.options.compilerArgs = [
-          "-processor", "org.checkerframework.checker.nullness.NullnessChecker",
           "-processorpath", "${project.configurations.checkerFramework.asPath}",
           "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}"
         ]
+        if (!userConfig.checkers.empty) {
+          compile.options.compilerArgs << "-processor" << userConfig.checkers.join(',')
+        }
         if (JavaVersion.current().java7) {
           compile.options.compilerArgs += ["-source", "7", "-target", "7"]
         } else {

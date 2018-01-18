@@ -166,9 +166,9 @@ class CheckerConfigurationSpec extends Specification {
       .withPluginClasspath()
       .buildAndFail()
 
-    then: 'the error message explains why both classes did not compile'
-    result.output.contains(JavaClassErrorOutput.FAILS_UNITS_CHECKER)
-    result.output.contains(JavaClassErrorOutput.FAILS_NULLNESS_CHECKER)
+    then: 'the error message explains why the classes did not compile'
+    result.output.contains(JavaClassErrorOutput.FAILS_UNITS_CHECKER) ||
+      result.output.contains(JavaClassErrorOutput.FAILS_NULLNESS_CHECKER)
   }
 
   def "Project configured to use no checkers compiles source that would fail nullness and units checkers"() {

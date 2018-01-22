@@ -26,3 +26,21 @@ apply plugin: "com.jaredsburrows.checkerframework"
 ```
 
 Snapshot versions are available in the JFrog Artifactory repository: https://oss.jfrog.org/webapp/#/builds/gradle-checker-framework-plugin
+
+## Configuration
+
+It is possible to configure the checkers you want to enable using the `checkerFramework.checkers` property.
+
+For example:
+
+```groovy
+checkerFramework {
+  checkers = [
+    "org.checkerframework.checker.units.UnitsChecker", 
+    "org.checkerframework.checker.nullness.NullnessChecker"]
+}
+```
+
+By default, only the `NullnessChecker` is enabled.
+
+You can find out what checkers are available in the [Checker Framework Manual](https://checkerframework.org/manual/#introduction).

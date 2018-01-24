@@ -1,12 +1,11 @@
 language: java
 
-jdk:
-  - oraclejdk8
+jdk: oraclejdk8
 
 install: true
 
 script:
-  - ./gradlew clean build jacocoTestReport coveralls --scan --parallel --stacktrace
+  - ./gradlew clean build --scan -s
 
 after_success:
    - .buildscript/deploySnapshot.sh

@@ -1,13 +1,11 @@
 compileJava {
-  sourceCompatibility = project.ext.sourceCompatibilityVersion
-  targetCompatibility = project.ext.targetCompatibilityVersion
+  sourceCompatibility = rootProject.ext.javaVersion
+  targetCompatibility = rootProject.ext.javaVersion
 
   // Show all warnings except boot classpath
   configure(options) {
     compilerArgs << "-Xlint:all"            // Turn on all warnings
-    compilerArgs << "-Xlint:-options"       // Turn off "missing" bootclasspath warning
     compilerArgs << "-Werror"               // Turn warnings into errors
-    compilerArgs << "-Xdiags:verbose"       // Turn on verbose errors
     encoding = "utf-8"
     incremental = true
     fork = true
@@ -15,15 +13,13 @@ compileJava {
 }
 
 compileGroovy {
-  sourceCompatibility = project.ext.sourceCompatibilityVersion
-  targetCompatibility = project.ext.targetCompatibilityVersion
+  sourceCompatibility = rootProject.ext.javaVersion
+  targetCompatibility = rootProject.ext.javaVersion
 
   // Show all warnings except boot classpath
   configure(options) {
     compilerArgs << "-Xlint:all"            // Turn on all warnings
-    compilerArgs << "-Xlint:-options"       // Turn off "missing" bootclasspath warning
     compilerArgs << "-Werror"               // Turn warnings into errors
-    compilerArgs << "-Xdiags:verbose"       // Turn on verbose errors
     encoding = "utf-8"
     incremental = true
     fork = true
@@ -44,6 +40,8 @@ test {
     showStackTraces true
     events "failed", "skipped"
   }
+
+  maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
 javadoc {

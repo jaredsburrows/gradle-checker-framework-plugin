@@ -17,7 +17,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.jaredsburrows:gradle-checker-framework-plugin:0.1.0"
+    classpath "com.jaredsburrows:gradle-checker-framework-plugin:0.2.0"
   }
 }
 

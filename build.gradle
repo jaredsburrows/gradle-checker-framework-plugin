@@ -1,11 +1,9 @@
 plugins {
-  id "com.gradle.build-scan" version "1.6"
-  id "com.github.kt3k.coveralls" version "2.8.1"
-  id "net.ltgt.errorprone" version "0.0.10"
-  id "com.jfrog.artifactory" version "4.4.18"
-  id "com.jfrog.bintray" version "1.7.3"
-  id "com.github.ben-manes.versions" version "0.15.0"
-  id "com.gradle.plugin-publish" version "0.9.7"
+  id "com.gradle.build-scan" version "1.11"
+  id "com.jfrog.artifactory" version "4.6.2"
+  id "com.jfrog.bintray" version "1.8.0"
+  id "com.github.ben-manes.versions" version "0.17.0"
+  id "com.gradle.plugin-publish" version "0.9.9"
   id "java-gradle-plugin"
   id "groovy"
   id "maven-publish"
@@ -14,6 +12,7 @@ plugins {
 
 repositories {
   jcenter()
+  google()
 }
 
 apply from: rootProject.file("gradle/versions.gradle")
@@ -22,8 +21,8 @@ group = GROUP
 version = VERSION_NAME
 description = POM_DESCRIPTION
 
-sourceCompatibility = ext.sourceCompatibilityVersion
-targetCompatibility = ext.sourceCompatibilityVersion
+sourceCompatibility = ext.javaVersion
+targetCompatibility = ext.javaVersion
 
 dependencies {
   implementation localGroovy()
@@ -38,5 +37,4 @@ apply from: rootProject.file("gradle/scan.gradle")
 apply from: rootProject.file("gradle/compile.gradle")
 apply from: rootProject.file("gradle/plugin.gradle")
 apply from: rootProject.file("gradle/publish.gradle")
-apply from: rootProject.file("gradle/quality.gradle")
 apply from: rootProject.file("gradle/wrapper.gradle")

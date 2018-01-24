@@ -6,10 +6,9 @@
 
 This plugin configures `JavaCompile` tasks to use the [Checker Framework](https://checkerframework.org).
 
-
 ## Download
 
-Gradle:
+**Release:**
 ```groovy
 buildscript {
   repositories {
@@ -23,7 +22,22 @@ buildscript {
 
 apply plugin: "com.jaredsburrows.checkerframework"
 ```
+Release versions are available in the JFrog Bintray repository: https://bintray.com/jaredsburrows/maven/gradle-checker-framework-plugin
 
+**Snapshot:**
+```groovy
+buildscript {
+  repositories {
+    maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local/" }
+  }
+
+  dependencies {
+    classpath "com.jaredsburrows:gradle-checker-framework-plugin:0.2.1-SNAPSHOT"
+  }
+}
+
+apply plugin: "com.jaredsburrows.checkerframework"
+```
 Snapshot versions are available in the JFrog Artifactory repository: https://oss.jfrog.org/webapp/#/builds/gradle-checker-framework-plugin
 
 ## Configuration

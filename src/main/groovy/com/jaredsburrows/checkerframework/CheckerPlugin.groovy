@@ -45,7 +45,7 @@ final class CheckerPlugin implements Plugin<Project> {
       throw new IllegalStateException("Checker plugin only supports Java 7 and Java 8 projects.")
     }
 
-    def userConfig = project.extensions.create('checkerFramework', CheckerExtension)
+    def userConfig = project.extensions.create("checkerFramework", CheckerExtension)
 
     // Create a map of the correct configurations with dependencies
     def dependencyMap = [
@@ -87,7 +87,7 @@ final class CheckerPlugin implements Plugin<Project> {
           "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}"
         ]
         if (!userConfig.checkers.empty) {
-          compile.options.compilerArgs << "-processor" << userConfig.checkers.join(',')
+          compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
         }
         if (JavaVersion.current().java7) {
           compile.options.compilerArgs += ["-source", "7", "-target", "7"]
@@ -101,7 +101,7 @@ final class CheckerPlugin implements Plugin<Project> {
             "${project.configurations.checkerFrameworkJavac.asPath}:" + ":" + options.bootClasspath
         }
         options.fork = true
-        //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
+//        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
       }
     }
   }

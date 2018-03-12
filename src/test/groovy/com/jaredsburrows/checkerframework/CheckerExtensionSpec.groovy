@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 final class CheckerExtensionSpec extends Specification {
   @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
-  private File buildFile
+  def buildFile
   private class JavaCode {
     private static String FAILS_UNITS_CHECKER = """
     import org.checkerframework.checker.units.UnitsTools;
@@ -46,7 +46,7 @@ final class CheckerExtensionSpec extends Specification {
   }
   private class JavaClassErrorOutput {
     private static String FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:8: error: [argument.type.incompatible]"
-    private static final String FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:8: error: [assignment.type.incompatible]"
+    private static String FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:8: error: [assignment.type.incompatible]"
   }
 
   def "setup"() {
@@ -55,7 +55,7 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project without configuration uses the nullness checker"() {
     given: "a project that applies the plugin without any configuration and can run the FailsNullnessChecker class"
-    buildFile.write(buildFileThatRunsClass("FailsNullnessChecker"))
+    buildFile << buildFileThatRunsClass("FailsNullnessChecker")
 
     and: "The source code contains a class that fails the NullnessChecker"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -74,7 +74,7 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project without configuration does not use the units checker"() {
     given: "a project that applies the plugin without any configuration and can run the FailsUnitsChecker class"
-    buildFile.write(buildFileThatRunsClass("FailsUnitsChecker"))
+    buildFile << buildFileThatRunsClass("FailsUnitsChecker")
 
     and: "The source code contains a class that fails the UnitsChecker"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -96,8 +96,8 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project configured to use the units checker fails to compile FailsUnitsChecker"() {
     given: "a project that applies the plugin configuring the units checker and can run the FailsUnitsChecker class"
-    buildFile.write(buildFileThatRunsClass("FailsUnitsChecker") +
-      "\ncheckerFramework { checkers = ['org.checkerframework.checker.units.UnitsChecker'] }")
+    buildFile << buildFileThatRunsClass("FailsUnitsChecker") +
+      "\ncheckerFramework { checkers = [\"org.checkerframework.checker.units.UnitsChecker\"] }"
 
     and: "The source code contains a class that fails the UnitsChecker"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -116,8 +116,8 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project configured to use the units checker can compile and run FailsNullnessChecker"() {
     given: "a project that applies the plugin configuring the units checker and can run the FailsNullnessChecker class"
-    buildFile.write(buildFileThatRunsClass("FailsNullnessChecker") +
-      "\ncheckerFramework { checkers = ['org.checkerframework.checker.units.UnitsChecker'] }")
+    buildFile << buildFileThatRunsClass("FailsNullnessChecker") +
+      "\ncheckerFramework { checkers = [\"org.checkerframework.checker.units.UnitsChecker\"] }"
 
     and: "The source code contains a class that fails the NullnessChecker but not the UnitsChecker"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -139,9 +139,9 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project configured to use both units and nullness checkers rejects both kinds of errors"() {
     given: "a project that applies the plugin configuring both nullness and units checker"
-    buildFile.write(buildFileThatRunsClass("FailsNullnessChecker") +
-      "\ncheckerFramework { checkers = ['org.checkerframework.checker.units.UnitsChecker'," +
-      "'org.checkerframework.checker.nullness.NullnessChecker'] }")
+    buildFile << buildFileThatRunsClass("FailsNullnessChecker") +
+      "\ncheckerFramework { checkers = [\"org.checkerframework.checker.units.UnitsChecker\"," +
+      "\"org.checkerframework.checker.nullness.NullnessChecker\"] }"
 
     and: "The source code contains classes that fails both checkers"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -162,8 +162,8 @@ final class CheckerExtensionSpec extends Specification {
 
   def "Project configured to use no checkers compiles source that would fail nullness and units checkers"() {
     given: "a project that applies the plugin configuring no checkers"
-    buildFile.write(buildFileThatRunsClass("FailsNullnessChecker") +
-      "\ncheckerFramework { checkers = [] }")
+    buildFile << buildFileThatRunsClass("FailsNullnessChecker") +
+      "\ncheckerFramework { checkers = [] }"
 
     and: "The source code contains classes that fails both checkers"
     def javaSrcDir = testProjectDir.newFolder("src", "main", "java")
@@ -184,14 +184,18 @@ final class CheckerExtensionSpec extends Specification {
     result.output.contains(JavaClassSuccessOutput.FAILS_NULLNESS_CHECKER)
   }
 
-  private static String buildFileThatRunsClass(String className) {
-    """\
+  private static def buildFileThatRunsClass(String className) {
+    """
     plugins {
       id "java"
       id "application"
       id "com.jaredsburrows.checkerframework"
     }
-    repositories { jcenter() }
+
+    repositories {
+      jcenter()
+    }
+
     mainClassName = "$className"
     """.stripIndent()
   }

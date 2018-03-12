@@ -1,8 +1,8 @@
 gradlePlugin {
   plugins {
-    checkerFrameworkPlugin {
-      id = "com.jaredsburrows.checkerframework"
-      implementationClass = "com.jaredsburrows.checkerframework.CheckerFrameworkPlugin"
+    licensePlugin {
+      id = PLUGIN_NAME
+      implementationClass = PLUGIN_NAME_CLASS
     }
   }
 }

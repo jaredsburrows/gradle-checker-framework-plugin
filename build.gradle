@@ -14,7 +14,7 @@ repositories {
   google()
 }
 
-apply from: rootProject.file("gradle/versions.gradle")
+apply from: "gradle/dependencies.gradle"
 
 group = GROUP
 version = VERSION_NAME
@@ -43,7 +43,7 @@ dependencies {
   testImplementation deps.spockCore, { exclude module: "groovy-all" } // Use localGroovy()
 }
 
-apply from: rootProject.file("gradle/scan.gradle")
-apply from: rootProject.file("gradle/compile.gradle")
-apply from: rootProject.file("gradle/plugin.gradle")
-apply from: rootProject.file("gradle/publish.gradle")
+apply from: "gradle/scan.gradle"
+apply from: "gradle/compile.gradle"
+apply from: "gradle/plugin.gradle"
+apply from: "gradle/publish.gradle"

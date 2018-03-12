@@ -4,10 +4,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 import spock.lang.Unroll
 
-/**
- * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
- */
-final class CheckerFrameworkPluginSpec extends Specification {
+final class CheckerPluginSpec extends Specification {
   def project
 
   def "setup"() {
@@ -16,7 +13,7 @@ final class CheckerFrameworkPluginSpec extends Specification {
 
   def "unsupported project project"() {
     when:
-    new CheckerFrameworkPlugin().apply(project) // project.apply plugin: "com.jaredsburrows.checkerframework"
+    new CheckerPlugin().apply(project)
 
     then:
     def e = thrown(IllegalStateException)
@@ -34,6 +31,6 @@ final class CheckerFrameworkPluginSpec extends Specification {
     noExceptionThrown()
 
     where:
-    projectPlugin << CheckerFrameworkPlugin.JVM_PLUGINS + CheckerFrameworkPlugin.ANDROID_PLUGINS
+    projectPlugin << CheckerPlugin.JVM_PLUGINS + CheckerPlugin.ANDROID_PLUGINS
   }
 }

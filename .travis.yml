@@ -5,7 +5,7 @@ jdk: oraclejdk8
 install: true
 
 script:
-  - ./gradlew clean build --scan -s
+  - ./gradlew clean build -s --scan
 
 after_success:
    - .buildscript/deploySnapshot.sh

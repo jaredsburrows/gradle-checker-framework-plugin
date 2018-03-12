@@ -8,10 +8,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.tasks.compile.AbstractCompile
 
-/**
- * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
- */
-final class CheckerFrameworkPlugin implements Plugin<Project> {
+final class CheckerPlugin implements Plugin<Project> {
   // Applicable plugins
   final static ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
   final static JVM_PLUGINS = ["kotlin", "groovy", "java"]
@@ -48,7 +45,7 @@ final class CheckerFrameworkPlugin implements Plugin<Project> {
       throw new IllegalStateException("Checker plugin only supports Java 7 and Java 8 projects.")
     }
 
-    def userConfig = project.extensions.create('checkerFramework', CheckerConfiguration)
+    def userConfig = project.extensions.create('checkerFramework', CheckerExtension)
 
     // Create a map of the correct configurations with dependencies
     def dependencyMap = [

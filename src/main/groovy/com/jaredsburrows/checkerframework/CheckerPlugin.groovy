@@ -49,10 +49,10 @@ final class CheckerPlugin implements Plugin<Project> {
 
     // Create a map of the correct configurations with dependencies
     def dependencyMap = [
-      [name: "$ANNOTATED_JDK_CONFIGURATION", descripion: "$ANNOTATED_JDK_CONFIGURATION_DESCRIPTION"]: "org.checkerframework:$jdkVersion:$LIBRARY_VERSION",
-      [name: "$JAVAC_CONFIGURATION", descripion: "$JAVAC_CONFIGURATION_DESCRIPTION"]                : "$COMPILER_DEPENDENCY",
-      [name: "$CONFIGURATION", descripion: "$ANNOTATED_JDK_CONFIGURATION_DESCRIPTION"]              : "$CHECKER_DEPENDENCY",
-      [name: "${JAVA_COMPILE_CONFIGURATION}", descripion: "$CONFIGURATION_DESCRIPTION"]             : "${CHECKER_QUAL_DEPENDENCY}"
+      [name: "${ANNOTATED_JDK_CONFIGURATION}", descripion: "${ANNOTATED_JDK_CONFIGURATION_DESCRIPTION}"]: "org.checkerframework:${jdkVersion}:${LIBRARY_VERSION}",
+      [name: "${JAVAC_CONFIGURATION}", descripion: "${JAVAC_CONFIGURATION_DESCRIPTION}"]                : "${COMPILER_DEPENDENCY}",
+      [name: "${CONFIGURATION}", descripion: "${ANNOTATED_JDK_CONFIGURATION_DESCRIPTION}"]              : "${CHECKER_DEPENDENCY}",
+      [name: "${JAVA_COMPILE_CONFIGURATION}", descripion: "${CONFIGURATION_DESCRIPTION}"]               : "${CHECKER_QUAL_DEPENDENCY}"
     ]
 
     // Now, apply the dependencies to project

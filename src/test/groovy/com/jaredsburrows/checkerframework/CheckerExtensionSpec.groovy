@@ -10,43 +10,45 @@ final class CheckerExtensionSpec extends Specification {
   @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
   def buildFile
   private class JavaCode {
-    private static String FAILS_UNITS_CHECKER = """
-    import org.checkerframework.checker.units.UnitsTools;
-    import org.checkerframework.checker.units.qual.A;
-    import org.checkerframework.checker.units.qual.s;
+    private static String FAILS_UNITS_CHECKER =
+      """
+      import org.checkerframework.checker.units.UnitsTools;
+      import org.checkerframework.checker.units.qual.A;
+      import org.checkerframework.checker.units.qual.s;
 
-    public class FailsUnitsChecker {
-      public static void main(String[] args) {
-        @s int t = 2 * UnitsTools.s;
-        @A int i = 5 * UnitsTools.A;
-        @s int s = t + i; // not valid
-        System.out.println("t + i = " + s);
+      public class FailsUnitsChecker {
+        public static void main(String[] args) {
+          @s int t = 2 * UnitsTools.s;
+          @A int i = 5 * UnitsTools.A;
+          @s int s = t + i; // not valid
+          System.out.println("t + i = " + s);
+        }
       }
-    }
-  """
-    private static String FAILS_NULLNESS_CHECKER = """
-  import org.checkerframework.checker.nullness.qual.NonNull;
-  import org.checkerframework.checker.nullness.qual.Nullable;
+      """.stripIndent().trim()
+    private static String FAILS_NULLNESS_CHECKER =
+      """
+      import org.checkerframework.checker.nullness.qual.NonNull;
+      import org.checkerframework.checker.nullness.qual.Nullable;
 
-  public class FailsNullnessChecker {
-    public static void main(String[] args) {
-      @Nullable String x = null;
-      System.out.println("X = " + takesNonNull(x));
-    }
+      public class FailsNullnessChecker {
+        public static void main(String[] args) {
+          @Nullable String x = null;
+          System.out.println("X = " + takesNonNull(x));
+        }
 
-    static String takesNonNull(@NonNull String s) {
-      return s;
-    }
-  }
-  """
+        static String takesNonNull(@NonNull String s) {
+          return s;
+        }
+      }
+      """.stripIndent().trim()
   }
   private class JavaClassSuccessOutput {
     private static String FAILS_UNITS_CHECKER = "t + i = 7"
     private static String FAILS_NULLNESS_CHECKER = "X = null"
   }
   private class JavaClassErrorOutput {
-    private static String FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:8: error: [argument.type.incompatible]"
-    private static String FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:8: error: [assignment.type.incompatible]"
+    private static String FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:7: error: [argument.type.incompatible]"
+    private static String FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:9: error: [assignment.type.incompatible]"
   }
 
   def "setup"() {
@@ -213,7 +215,9 @@ final class CheckerExtensionSpec extends Specification {
     }
 
     repositories {
-      jcenter()
+      maven {
+        url "${getClass().getResource("/maven/").toURI()}"
+      }
     }
 
     mainClassName = "${className}"

@@ -13,7 +13,7 @@ final class CheckerPlugin implements Plugin<Project> {
   final static ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
   final static JVM_PLUGINS = ["kotlin", "groovy", "java"]
   // Checker Framework configurations and dependencies
-  final static LIBRARY_VERSION = "2.1.11"
+  final static LIBRARY_VERSION = "2.4.0"
   final static ANNOTATED_JDK_NAME_JDK7 = "jdk7"
   final static ANNOTATED_JDK_NAME_JDK8 = "jdk8"
   final static ANNOTATED_JDK_CONFIGURATION = "checkerFrameworkAnnotatedJDK"

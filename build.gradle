@@ -39,7 +39,6 @@ dependencies {
   implementation localGroovy()
 
   testImplementation deps.gradle
-  testImplementation deps.kotlinGradlePlugin
   testImplementation deps.spockCore, { exclude module: "groovy-all" } // Use localGroovy()
 }
 

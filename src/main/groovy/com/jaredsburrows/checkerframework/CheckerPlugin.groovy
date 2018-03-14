@@ -11,7 +11,7 @@ import org.gradle.api.tasks.compile.AbstractCompile
 final class CheckerPlugin implements Plugin<Project> {
   // Applicable plugins
   final static ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
-  final static JVM_PLUGINS = ["kotlin", "groovy", "java"]
+  final static JVM_PLUGINS = ["groovy", "java", "java-library"]
   // Checker Framework configurations and dependencies
   final static LIBRARY_VERSION = "2.4.0"
   final static ANNOTATED_JDK_NAME_JDK7 = "jdk7"

@@ -28,8 +28,6 @@ final class CheckerPlugin implements Plugin<Project> {
   final static CHECKER_QUAL_DEPENDENCY = "org.checkerframework:checker-qual:${LIBRARY_VERSION}"
 
   @Override void apply(Project project) {
-    project.evaluationDependsOnChildren()
-
     if (!isValidProject(project)) {
       throw new IllegalStateException(
         "Checker plugin can only be applied to android or java projects.")

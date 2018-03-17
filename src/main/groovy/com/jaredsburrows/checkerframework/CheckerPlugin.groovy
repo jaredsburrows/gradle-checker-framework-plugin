@@ -1,11 +1,8 @@
 package com.jaredsburrows.checkerframework
 
-import org.gradle.api.Action
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.tasks.compile.AbstractCompile
 
 final class CheckerPlugin implements Plugin<Project> {
@@ -61,17 +58,11 @@ final class CheckerPlugin implements Plugin<Project> {
           project.dependencies.create(dependency))
       } else {
         // If the user does not have the configuration, the plugin will create it
-        project.configurations.create(configuration.name, new Action<Configuration>() {
-          @Override
-          void execute(Configuration files) {
-            files.description = configuration.descripion
-            files.visible = false
-            files.defaultDependencies(new Action<DependencySet>() {
-              @Override
-              void execute(DependencySet dependencies) {
-                dependencies.add(project.dependencies.create(dependency))
-              }
-            })
+        project.configurations.create(configuration.name, { files ->
+          files.description = configuration.descripion
+          files.visible = false
+          files.defaultDependencies { dependencies ->
+            dependencies.add(project.dependencies.create(dependency))
           }
         })
       }

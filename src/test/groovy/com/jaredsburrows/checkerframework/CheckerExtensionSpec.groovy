@@ -10,7 +10,7 @@ final class CheckerExtensionSpec extends Specification {
   @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
   def buildFile
   private class JavaCode {
-    private static String FAILS_UNITS_CHECKER =
+    private static def FAILS_UNITS_CHECKER =
       """
       import org.checkerframework.checker.units.UnitsTools;
       import org.checkerframework.checker.units.qual.A;
@@ -25,7 +25,7 @@ final class CheckerExtensionSpec extends Specification {
         }
       }
       """.stripIndent().trim()
-    private static String FAILS_NULLNESS_CHECKER =
+    private static def FAILS_NULLNESS_CHECKER =
       """
       import org.checkerframework.checker.nullness.qual.NonNull;
       import org.checkerframework.checker.nullness.qual.Nullable;
@@ -43,12 +43,12 @@ final class CheckerExtensionSpec extends Specification {
       """.stripIndent().trim()
   }
   private class JavaClassSuccessOutput {
-    private static String FAILS_UNITS_CHECKER = "t + i = 7"
-    private static String FAILS_NULLNESS_CHECKER = "X = null"
+    private static def FAILS_UNITS_CHECKER = "t + i = 7"
+    private static def FAILS_NULLNESS_CHECKER = "X = null"
   }
   private class JavaClassErrorOutput {
-    private static String FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:7: error: [argument.type.incompatible]"
-    private static String FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:9: error: [assignment.type.incompatible]"
+    private static def FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:7: error: [argument.type.incompatible]"
+    private static def FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:9: error: [assignment.type.incompatible]"
   }
 
   def "setup"() {

@@ -7,22 +7,22 @@ import org.gradle.api.tasks.compile.AbstractCompile
 
 final class CheckerPlugin implements Plugin<Project> {
   // Applicable plugins
-  final static ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
-  final static JVM_PLUGINS = ["groovy", "java", "java-library"]
+  final static def ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
+  final static def JVM_PLUGINS = ["groovy", "java", "java-library"]
   // Checker Framework configurations and dependencies
-  final static LIBRARY_VERSION = "2.4.0"
-  final static ANNOTATED_JDK_NAME_JDK7 = "jdk7"
-  final static ANNOTATED_JDK_NAME_JDK8 = "jdk8"
-  final static ANNOTATED_JDK_CONFIGURATION = "checkerFrameworkAnnotatedJDK"
-  final static ANNOTATED_JDK_CONFIGURATION_DESCRIPTION = "A copy of JDK classes with Checker Framework type qualifiers inserted."
-  final static JAVAC_CONFIGURATION = "checkerFrameworkJavac"
-  final static JAVAC_CONFIGURATION_DESCRIPTION = "A customization of the OpenJDK javac compiler with additional support for type annotations."
-  final static CONFIGURATION = "checkerFramework"
-  final static CONFIGURATION_DESCRIPTION = "The Checker Framework: custom pluggable types for Java."
-  final static JAVA_COMPILE_CONFIGURATION = "compile"
-  final static COMPILER_DEPENDENCY = "org.checkerframework:compiler:${LIBRARY_VERSION}"
-  final static CHECKER_DEPENDENCY = "org.checkerframework:checker:${LIBRARY_VERSION}"
-  final static CHECKER_QUAL_DEPENDENCY = "org.checkerframework:checker-qual:${LIBRARY_VERSION}"
+  private final static def LIBRARY_VERSION = "2.4.0"
+  private final static def ANNOTATED_JDK_NAME_JDK7 = "jdk7"
+  private final static def ANNOTATED_JDK_NAME_JDK8 = "jdk8"
+  private final static def ANNOTATED_JDK_CONFIGURATION = "checkerFrameworkAnnotatedJDK"
+  private final static def ANNOTATED_JDK_CONFIGURATION_DESCRIPTION = "A copy of JDK classes with Checker Framework type qualifiers inserted."
+  private final static def JAVAC_CONFIGURATION = "checkerFrameworkJavac"
+  private final static def JAVAC_CONFIGURATION_DESCRIPTION = "A customization of the OpenJDK javac compiler with additional support for type annotations."
+  private final static def CONFIGURATION = "checkerFramework"
+  private final static def CONFIGURATION_DESCRIPTION = "The Checker Framework: custom pluggable types for Java."
+  private final static def JAVA_COMPILE_CONFIGURATION = "compile"
+  private final static def COMPILER_DEPENDENCY = "org.checkerframework:compiler:${LIBRARY_VERSION}"
+  private final static def CHECKER_DEPENDENCY = "org.checkerframework:checker:${LIBRARY_VERSION}"
+  private final static def CHECKER_QUAL_DEPENDENCY = "org.checkerframework:checker-qual:${LIBRARY_VERSION}"
 
   @Override void apply(Project project) {
     if (!isValidProject(project)) {
@@ -96,21 +96,21 @@ final class CheckerPlugin implements Plugin<Project> {
   /**
    * Check to see if we can apply plugin to existing project.
    */
-  static isValidProject(project) {
+  private def static isValidProject(def project) {
     isAndroidProject(project) || isJavaProject(project)
   }
 
   /**
    * Check if the project has Android plugins.
    */
-  static isAndroidProject(project) {
+  private def static isAndroidProject(def project) {
     ANDROID_PLUGINS.find { plugin -> project.plugins.hasPlugin(plugin) }
   }
 
   /**
    * Check if project has Java plugins.
    */
-  static isJavaProject(project) {
+  private def static isJavaProject(def project) {
     JVM_PLUGINS.find { plugin -> project.plugins.hasPlugin(plugin) }
   }
 }

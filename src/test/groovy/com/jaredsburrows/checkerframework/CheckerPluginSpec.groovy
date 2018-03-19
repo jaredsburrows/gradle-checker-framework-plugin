@@ -1,36 +1,47 @@
 package com.jaredsburrows.checkerframework
 
-import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.Specification
+import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Unroll
+import test.BaseSpecification
 
-final class CheckerPluginSpec extends Specification {
-  def project
-
-  def "setup"() {
-    project = ProjectBuilder.builder().build()
-  }
-
-  def "unsupported project project"() {
-    when:
-    new CheckerPlugin().apply(project)
-
-    then:
-    def e = thrown(IllegalStateException)
-    e.message == "Checker plugin can only be applied to android or java projects."
-  }
-
-  @Unroll "#projectPlugin project"() {
+final class CheckerPluginSpec extends BaseSpecification {
+  @Unroll def "java project running licenseReport using with gradle #gradleVersion"() {
     given:
-    project.apply plugin: projectPlugin
+    buildFile <<
+      """
+        plugins {
+          id "java"
+          id "com.jaredsburrows.checkerframework"
+        }
+
+        repositories {
+          maven {
+            url "${getClass().getResource("/maven/").toURI()}"
+          }
+        }
+      """.stripIndent().trim()
 
     when:
-    project.apply plugin: "com.jaredsburrows.checkerframework"
+    GradleRunner.create()
+      .withGradleVersion(gradleVersion)
+      .withProjectDir(testProjectDir.root)
+      .withPluginClasspath()
+      .build()
 
     then:
     noExceptionThrown()
 
     where:
-    projectPlugin << CheckerPlugin.JVM_PLUGINS + CheckerPlugin.ANDROID_PLUGINS
+    gradleVersion << [
+      "3.4",
+      "3.5",
+      "4.0",
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4",
+      "4.5",
+      "4.6",
+    ]
   }
 }

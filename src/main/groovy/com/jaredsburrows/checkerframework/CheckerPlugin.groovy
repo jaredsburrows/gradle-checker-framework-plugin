@@ -6,9 +6,13 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.compile.AbstractCompile
 
 final class CheckerPlugin implements Plugin<Project> {
-  // Applicable plugins
-  final static def ANDROID_PLUGINS = ["com.android.application", "com.android.library", "com.android.test"]
-  final static def JVM_PLUGINS = ["groovy", "java", "java-library"]
+  // Handles pre-3.0 and 3.0+, "com.android.base" was added in AGP 3.0
+  private static final def ANDROID_IDS = [
+    "com.android.application",
+    "com.android.feature",
+    "com.android.instantapp",
+    "com.android.library",
+    "com.android.test"]
   // Checker Framework configurations and dependencies
   private final static def LIBRARY_VERSION = "2.4.0"
   private final static def ANNOTATED_JDK_NAME_JDK7 = "jdk7"
@@ -25,11 +29,12 @@ final class CheckerPlugin implements Plugin<Project> {
   private final static def CHECKER_QUAL_DEPENDENCY = "org.checkerframework:checker-qual:${LIBRARY_VERSION}"
 
   @Override void apply(Project project) {
-    if (!isValidProject(project)) {
-      throw new IllegalStateException(
-        "Checker plugin can only be applied to android or java projects.")
+    (ANDROID_IDS + "java").each { id ->
+      project.plugins.withId(id) { configureProject(project) }
     }
+  }
 
+  private static configureProject(def project) {
     // Check for Java 7 or Java 8 to make sure to get correct annotations dependency
     def jdkVersion
     if (JavaVersion.current().java7) {
@@ -58,13 +63,13 @@ final class CheckerPlugin implements Plugin<Project> {
           project.dependencies.create(dependency))
       } else {
         // If the user does not have the configuration, the plugin will create it
-        project.configurations.create(configuration.name, { files ->
+        project.configurations.create(configuration.name) { files ->
           files.description = configuration.descripion
           files.visible = false
           files.defaultDependencies { dependencies ->
             dependencies.add(project.dependencies.create(dependency))
           }
-        })
+        }
       }
     }
 
@@ -83,34 +88,16 @@ final class CheckerPlugin implements Plugin<Project> {
         } else {
           compile.options.compilerArgs += ["-source", "8", "-target", "8"]
         }
-        if (isAndroidProject(project)) {
-          options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
-          options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
+
+        ANDROID_IDS.each { id ->
+          project.plugins.withId(id) {
+            options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
+            options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
+          }
         }
         options.fork = true
-//        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
+        //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
       }
     }
-  }
-
-  /**
-   * Check to see if we can apply plugin to existing project.
-   */
-  private def static isValidProject(def project) {
-    isAndroidProject(project) || isJavaProject(project)
-  }
-
-  /**
-   * Check if the project has Android plugins.
-   */
-  private def static isAndroidProject(def project) {
-    ANDROID_PLUGINS.find { plugin -> project.plugins.hasPlugin(plugin) }
-  }
-
-  /**
-   * Check if project has Java plugins.
-   */
-  private def static isJavaProject(def project) {
-    JVM_PLUGINS.find { plugin -> project.plugins.hasPlugin(plugin) }
   }
 }

@@ -35,11 +35,16 @@ final class CheckerPlugin implements Plugin<Project> {
   }
 
   private static configureProject(def project) {
+    JavaVersion javaVersion =
+        project.extensions.findByName('android')?.compileOptions?.sourceCompatibility ?:
+        project.convention.findByName('jdk')?.sourceCompatibility ?:
+        JavaVersion.current()
+
     // Check for Java 7 or Java 8 to make sure to get correct annotations dependency
     def jdkVersion
-    if (JavaVersion.current().java7) {
+    if (javaVersion.java7) {
       jdkVersion = ANNOTATED_JDK_NAME_JDK7
-    } else if (JavaVersion.current().java8) {
+    } else if (javaVersion.java8) {
       jdkVersion = ANNOTATED_JDK_NAME_JDK8
     } else {
       throw new IllegalStateException("Checker plugin only supports Java 7 and Java 8 projects.")
@@ -82,11 +87,6 @@ final class CheckerPlugin implements Plugin<Project> {
         ]
         if (!userConfig.checkers.empty) {
           compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
-        }
-        if (JavaVersion.current().java7) {
-          compile.options.compilerArgs += ["-source", "7", "-target", "7"]
-        } else {
-          compile.options.compilerArgs += ["-source", "8", "-target", "8"]
         }
 
         ANDROID_IDS.each { id ->

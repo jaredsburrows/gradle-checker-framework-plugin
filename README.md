@@ -16,11 +16,11 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.jaredsburrows:gradle-checker-framework-plugin:0.2.1"
+    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.1'
   }
 }
 
-apply plugin: "com.jaredsburrows.checkerframework"
+apply plugin: 'com.jaredsburrows.checkerframework'
 ```
 Release versions are available in the [JFrog Bintray repository](https://jcenter.bintray.com/).
 
@@ -28,15 +28,15 @@ Release versions are available in the [JFrog Bintray repository](https://jcenter
 ```groovy
 buildscript {
   repositories {
-    maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local/" }
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
   }
 
   dependencies {
-    classpath "com.jaredsburrows:gradle-checker-framework-plugin:0.2.2-SNAPSHOT"
+    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.2-SNAPSHOT'
   }
 }
 
-apply plugin: "com.jaredsburrows.checkerframework"
+apply plugin: 'com.jaredsburrows.checkerframework'
 ```
 Snapshot versions are available in the [JFrog Artifactory repository](https://oss.jfrog.org/artifactory/libs-snapshot/).
 
@@ -49,8 +49,9 @@ For example:
 ```groovy
 checkerFramework {
   checkers = [
-    "org.checkerframework.checker.units.UnitsChecker", 
-    "org.checkerframework.checker.nullness.NullnessChecker"]
+    'org.checkerframework.checker.units.UnitsChecker',
+    'org.checkerframework.checker.nullness.NullnessChecker'
+  ]
 }
 ```
 

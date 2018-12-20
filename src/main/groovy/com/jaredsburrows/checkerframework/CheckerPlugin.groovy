@@ -3,6 +3,9 @@ package com.jaredsburrows.checkerframework
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
+import org.gradle.api.plugins.AppliedPlugin
 import org.gradle.api.tasks.compile.AbstractCompile
 
 final class CheckerPlugin implements Plugin<Project> {
@@ -28,13 +31,22 @@ final class CheckerPlugin implements Plugin<Project> {
   private final static def CHECKER_DEPENDENCY = "org.checkerframework:checker:${LIBRARY_VERSION}"
   private final static def CHECKER_QUAL_DEPENDENCY = "org.checkerframework:checker-qual:${LIBRARY_VERSION}"
 
+  private final static Logger LOG = Logging.getLogger(CheckerPlugin)
+
   @Override void apply(Project project) {
-    (ANDROID_IDS + "java").each { id ->
-      project.plugins.withId(id) { configureProject(project) }
+    CheckerExtension userConfig = project.extensions.create("checkerFramework", CheckerExtension)
+
+    project.gradle.projectsEvaluated {
+      AppliedPlugin prereq = (ANDROID_IDS + "java").findResult(project.pluginManager.&findPlugin)
+      if (!prereq) LOG.warn('No android or java plugins found, checker compiler options will not be applied.')
+      else {
+        LOG.info('Found plugin {}, applying checker compiler options.', prereq.id)
+        configureProject(project, userConfig)
+      }
     }
   }
 
-  private static configureProject(def project) {
+  private static configureProject(Project project, CheckerExtension userConfig) {
     JavaVersion javaVersion =
         project.extensions.findByName('android')?.compileOptions?.sourceCompatibility ?:
         project.convention.findByName('jdk')?.sourceCompatibility ?:
@@ -49,8 +61,6 @@ final class CheckerPlugin implements Plugin<Project> {
     } else {
       throw new IllegalStateException("Checker plugin only supports Java 7 and Java 8 projects.")
     }
-
-    def userConfig = project.extensions.create("checkerFramework", CheckerExtension)
 
     // Create a map of the correct configurations with dependencies
     def dependencyMap = [
@@ -79,25 +89,23 @@ final class CheckerPlugin implements Plugin<Project> {
     }
 
     // Apply checker to project
-    project.gradle.projectsEvaluated {
-      project.tasks.withType(AbstractCompile).all { compile ->
-        compile.options.compilerArgs = [
-          "-processorpath", "${project.configurations.checkerFramework.asPath}".toString(),
-          "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}".toString()
-        ]
-        if (!userConfig.checkers.empty) {
-          compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
-        }
-
-        ANDROID_IDS.each { id ->
-          project.plugins.withId(id) {
-            options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
-            options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
-          }
-        }
-        options.fork = true
-        //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
+    project.tasks.withType(AbstractCompile).all { compile ->
+      compile.options.annotationProcessorPath = project.configurations.checkerFramework
+      compile.options.compilerArgs = [
+        "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}".toString()
+      ]
+      if (!userConfig.checkers.empty) {
+        compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
       }
+
+      ANDROID_IDS.each { id ->
+        project.plugins.withId(id) {
+          options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
+          options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
+        }
+      }
+      options.fork = true
+      //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
     }
   }
 }

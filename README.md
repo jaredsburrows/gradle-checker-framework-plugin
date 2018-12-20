@@ -16,7 +16,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.1'
+    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.2'
   }
 }
 
@@ -32,7 +32,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.2-SNAPSHOT'
+    classpath 'com.jaredsburrows:gradle-checker-framework-plugin:0.2.3-SNAPSHOT'
   }
 }
 

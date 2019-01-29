@@ -115,4 +115,68 @@ final class CheckerPluginSpec extends BaseSpecification {
     gradleVersion << TESTED_GRADLE_VERSIONS
   }
 
+  def 'with relevant plugin loaded subsequently, compiler settings are applied'() {
+    given:
+    buildFile <<
+      """
+        plugins {
+          id 'com.jaredsburrows.checkerframework'
+          id 'java'
+        }
+
+        repositories {
+          maven {
+            url "${getClass().getResource("/maven/").toURI()}"
+          }
+        }
+      """.stripIndent().trim()
+
+    when:
+    BuildResult result = GradleRunner.create()
+      .withGradleVersion(gradleVersion)
+      .withProjectDir(testProjectDir.root)
+      .withPluginClasspath()
+      .withArguments('--info')
+      .build()
+
+    then:
+    result.output.contains('applying checker compiler options')
+
+    where:
+    gradleVersion << TESTED_GRADLE_VERSIONS
+  }
+
+  def 'with resolved configuration dependencies, compilation settings are still applied'() {
+    given:
+    buildFile <<
+      """
+        plugins {
+          id 'com.jaredsburrows.checkerframework'
+          id 'java'
+          id 'application'
+        }
+
+        repositories {
+          maven {
+            url "${getClass().getResource("/maven/").toURI()}"
+          }
+        }
+        // Trigger resolution of compile classpath
+        println project.sourceSets.main.compileClasspath as List
+      """.stripIndent().trim()
+
+    when:
+    BuildResult result = GradleRunner.create()
+      .withGradleVersion(gradleVersion)
+      .withProjectDir(testProjectDir.root)
+      .withPluginClasspath()
+      .withArguments('--info')
+      .build()
+
+    then:
+    result.output.contains('applying checker compiler options')
+
+    where:
+    gradleVersion << TESTED_GRADLE_VERSIONS
+  }
 }

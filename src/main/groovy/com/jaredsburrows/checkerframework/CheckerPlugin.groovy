@@ -35,22 +35,23 @@ final class CheckerPlugin implements Plugin<Project> {
 
   @Override void apply(Project project) {
     CheckerExtension userConfig = project.extensions.create("checkerFramework", CheckerExtension)
-
-    project.gradle.projectsEvaluated {
-      AppliedPlugin prereq = (ANDROID_IDS + "java").findResult(project.pluginManager.&findPlugin)
-      if (!prereq) LOG.warn('No android or java plugins found, checker compiler options will not be applied.')
-      else {
-        LOG.info('Found plugin {}, applying checker compiler options.', prereq.id)
+    boolean applied = false
+    (ANDROID_IDS + "java").each { id ->
+      project.pluginManager.withPlugin(id) {
+        LOG.info('Found plugin {}, applying checker compiler options.', id)
         configureProject(project, userConfig)
+        if (!applied) applied = true
       }
+    }
+    project.gradle.projectsEvaluated {
+      if (!applied) LOG.warn('No android or java plugins found, checker compiler options will not be applied.')
     }
   }
 
   private static configureProject(Project project, CheckerExtension userConfig) {
     JavaVersion javaVersion =
         project.extensions.findByName('android')?.compileOptions?.sourceCompatibility ?:
-        project.convention.findByName('jdk')?.sourceCompatibility ?:
-        JavaVersion.current()
+        project.property('sourceCompatibility')
 
     // Check for Java 7 or Java 8 to make sure to get correct annotations dependency
     def jdkVersion
@@ -89,23 +90,25 @@ final class CheckerPlugin implements Plugin<Project> {
     }
 
     // Apply checker to project
-    project.tasks.withType(AbstractCompile).all { compile ->
-      compile.options.annotationProcessorPath = project.configurations.checkerFramework
-      compile.options.compilerArgs = [
-        "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}".toString()
-      ]
-      if (!userConfig.checkers.empty) {
-        compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
-      }
-
-      ANDROID_IDS.each { id ->
-        project.plugins.withId(id) {
-          options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
-          options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
+    project.gradle.projectsEvaluated {
+      project.tasks.withType(AbstractCompile).all { compile ->
+        compile.options.annotationProcessorPath = project.configurations.checkerFramework
+        compile.options.compilerArgs = [
+          "-Xbootclasspath/p:${project.configurations.checkerFrameworkAnnotatedJDK.asPath}".toString()
+        ]
+        if (!userConfig.checkers.empty) {
+          compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
         }
+
+        ANDROID_IDS.each { id ->
+          project.plugins.withId(id) {
+            options.bootClasspath = System.getProperty("sun.boot.class.path") + ":" + options.bootClasspath
+            options.bootClasspath = "${project.configurations.checkerFrameworkJavac.asPath}:".toString() + ":" + options.bootClasspath
+          }
+        }
+        options.fork = true
+        //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
       }
-      options.fork = true
-      //        options.forkOptions.jvmArgs += ["-Xbootclasspath/p:${project.configurations.checkerFrameworkJavac.asPath}"]
     }
   }
 }

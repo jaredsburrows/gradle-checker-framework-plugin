@@ -98,7 +98,7 @@ final class CheckerPlugin implements Plugin<Project> {
         compile.options.compilerArgs << "-processor" << userConfig.checkers.join(",")
       }
 
-      userConfig.extraJavacOptions.forEach({option -> compile.options.compilerArgs << option})
+      userConfig.extraJavacArgs.forEach({option -> compile.options.compilerArgs << option})
 
       ANDROID_IDS.each { id ->
         project.plugins.withId(id) {

@@ -42,6 +42,8 @@ Snapshot versions are available in the [JFrog Artifactory repository](https://os
 
 ## Configuration
 
+### Configuring which checkers to use
+
 It is possible to configure the checkers you want to enable using the `checkerFramework.checkers` property.
 
 For example:
@@ -58,6 +60,35 @@ checkerFramework {
 By default, only the `NullnessChecker` is enabled.
 
 You can find out what checkers are available in the [Checker Framework Manual](https://checkerframework.org/manual/#introduction).
+
+### Providing checker-specific options to the compiler
+
+You can set the `checkerFramework.extraJavacArgs` property in order to pass additional options to the compiler when running
+a typechecker.
+
+For example, to use a stub file:
+
+```groovy
+checkerFramework {
+  extraJavacArgs = [
+    '-Astubs=/path/to/my/stub/file.astub'
+  ]
+}
+```
+
+### Configuring third-party checkers
+
+To use a third-party typechecker (i.e. one that is not distributed with the Checker Framework),
+add a dependency to the `checkerFramework` dependency configuration.
+
+For example, to use the [Glacier](http://mcoblenz.github.io/Glacier/) immutability checker:
+
+```groovy
+dependencies {
+  ...
+  checkerFramework 'edu.cmu.cs.glacier:glacier:0.1'
+}
+```
 
 ## License
 

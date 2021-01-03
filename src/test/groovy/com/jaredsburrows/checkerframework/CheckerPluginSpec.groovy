@@ -9,13 +9,14 @@ import spock.lang.Unroll
 
 final class CheckerPluginSpec extends Specification {
   @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
-  def buildFile
+  private def buildFile
   private static final List<String> TESTED_GRADLE_VERSIONS = [
     '4.0',
     '4.5',
     '4.9',
     '4.10',
     '5.0',
+    '6.0'
   ]
 
   def "setup"() {
@@ -32,9 +33,8 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          maven {
-            url "${getClass().getResource("/maven/").toURI()}"
-          }
+          jcenter()
+          google()
         }
       """.stripIndent().trim()
 
@@ -61,9 +61,8 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          maven {
-            url "${getClass().getResource("/maven/").toURI()}"
-          }
+          jcenter()
+          google()
         }
       """.stripIndent().trim()
 
@@ -91,9 +90,8 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          maven {
-            url "${getClass().getResource("/maven/").toURI()}"
-          }
+          jcenter()
+          google()
         }
       """.stripIndent().trim()
 

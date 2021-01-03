@@ -174,9 +174,8 @@ final class CheckerExtensionSpec extends Specification {
     }
 
     repositories {
-      maven {
-        url "${getClass().getResource("/maven/").toURI()}"
-      }
+      jcenter()
+      google()
     }
 
     mainClassName = "${className}"

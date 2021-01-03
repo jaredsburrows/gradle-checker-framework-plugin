@@ -49,8 +49,7 @@ final class CheckerPlugin implements Plugin<Project> {
   private static configureProject(Project project, CheckerExtension userConfig) {
     JavaVersion javaVersion =
         project.extensions.findByName('android')?.compileOptions?.sourceCompatibility ?:
-        project.convention.findByName('jdk')?.sourceCompatibility ?:
-        JavaVersion.current()
+        project.convention.findByName('jdk')?.sourceCompatibility ?: JavaVersion.current()
 
     // Check for Java 7 or Java 8 to make sure to get correct annotations dependency
     def jdkVersion

@@ -33,7 +33,7 @@ def pomConfig = {
   }
 }
 
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
+task docsJar(type: Jar, dependsOn: groovydoc) {
   group = 'Publications'
   description = 'Create javadoc jar of Groovy documentation.'
   classifier = 'groovydoc'
@@ -70,7 +70,7 @@ publishing {
   publications {
     maven(MavenPublication) {
       from components.java // includes main 'artifact jar'
-      artifact groovydocJar
+      artifact docsJar
       artifact sourcesJar
       artifact testsJar
       artifact reportsZip
@@ -91,7 +91,7 @@ publishing {
     }
   }
 }
-publish.dependsOn jar, groovydocJar, sourcesJar, testsJar, reportsZip
+publish.dependsOn jar, docsJar, sourcesJar, testsJar, reportsZip
 publish.dependsOn 'generatePomFileForMavenPublication'
 
 // Snapshots published to JFrog Artifactory repository
@@ -116,7 +116,7 @@ artifactory {
     }
   }
 }
-artifactoryPublish.dependsOn jar, groovydocJar, sourcesJar, testsJar, reportsZip
+artifactoryPublish.dependsOn jar, docsJar, sourcesJar, testsJar, reportsZip
 artifactoryPublish.dependsOn 'generatePomFileForMavenPublication'
 
 // Publishes to JFrog Bintray's JCenter repository
@@ -152,7 +152,7 @@ bintray {
     }
   }
 }
-bintrayUpload.dependsOn jar, groovydocJar, sourcesJar, testsJar, reportsZip
+bintrayUpload.dependsOn jar, docsJar, sourcesJar, testsJar, reportsZip
 bintrayUpload.dependsOn 'generatePomFileForMavenPublication'
 
 // Publishes to JFrog Bintray's JCenter repository
@@ -168,7 +168,7 @@ pluginBundle {
     }
   }
 }
-publishPlugins.dependsOn jar, groovydocJar, sourcesJar, testsJar, reportsZip
+publishPlugins.dependsOn jar, docsJar, sourcesJar, testsJar, reportsZip
 publishPlugins.dependsOn 'generatePomFileForMavenPublication'
 
 // Publish to both Bintray and Gradle repositories

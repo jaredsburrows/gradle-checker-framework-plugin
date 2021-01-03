@@ -8,48 +8,7 @@ import spock.lang.Specification
 
 final class CheckerExtensionSpec extends Specification {
   @Rule TemporaryFolder testProjectDir = new TemporaryFolder()
-  def buildFile
-  private class JavaCode {
-    private static def FAILS_UNITS_CHECKER =
-      """
-      import org.checkerframework.checker.units.UnitsTools;
-      import org.checkerframework.checker.units.qual.A;
-      import org.checkerframework.checker.units.qual.s;
-
-      public class FailsUnitsChecker {
-        public static void main(String[] args) {
-          @s int t = 2 * UnitsTools.s;
-          @A int i = 5 * UnitsTools.A;
-          @s int s = t + i; // not valid
-          System.out.println("t + i = " + s);
-        }
-      }
-      """.stripIndent().trim()
-    private static def FAILS_NULLNESS_CHECKER =
-      """
-      import org.checkerframework.checker.nullness.qual.NonNull;
-      import org.checkerframework.checker.nullness.qual.Nullable;
-
-      public class FailsNullnessChecker {
-        public static void main(String[] args) {
-          @Nullable String x = null;
-          System.out.println("X = " + takesNonNull(x));
-        }
-
-        static String takesNonNull(@NonNull String s) {
-          return s;
-        }
-      }
-      """.stripIndent().trim()
-  }
-  private class JavaClassSuccessOutput {
-    private static def FAILS_UNITS_CHECKER = "t + i = 7"
-    private static def FAILS_NULLNESS_CHECKER = "X = null"
-  }
-  private class JavaClassErrorOutput {
-    private static def FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:7: error: [argument.type.incompatible]"
-    private static def FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:9: error: [assignment.type.incompatible]"
-  }
+  private def buildFile
 
   def "setup"() {
     buildFile = testProjectDir.newFile("build.gradle")
@@ -222,5 +181,50 @@ final class CheckerExtensionSpec extends Specification {
 
     mainClassName = "${className}"
     """.stripIndent()
+  }
+
+  private class JavaCode {
+    private static def FAILS_UNITS_CHECKER =
+      """
+      import org.checkerframework.checker.units.UnitsTools;
+      import org.checkerframework.checker.units.qual.A;
+      import org.checkerframework.checker.units.qual.s;
+
+      public class FailsUnitsChecker {
+        public static void main(String[] args) {
+          @s int t = 2 * UnitsTools.s;
+          @A int i = 5 * UnitsTools.A;
+          @s int s = t + i; // not valid
+          System.out.println("t + i = " + s);
+        }
+      }
+      """.stripIndent().trim()
+
+    private static def FAILS_NULLNESS_CHECKER =
+      """
+      import org.checkerframework.checker.nullness.qual.NonNull;
+      import org.checkerframework.checker.nullness.qual.Nullable;
+
+      public class FailsNullnessChecker {
+        public static void main(String[] args) {
+          @Nullable String x = null;
+          System.out.println("X = " + takesNonNull(x));
+        }
+
+        static String takesNonNull(@NonNull String s) {
+          return s;
+        }
+      }
+      """.stripIndent().trim()
+  }
+
+  private class JavaClassSuccessOutput {
+    private static def FAILS_UNITS_CHECKER = "t + i = 7"
+    private static def FAILS_NULLNESS_CHECKER = "X = null"
+  }
+
+  private class JavaClassErrorOutput {
+    private static def FAILS_NULLNESS_CHECKER = "FailsNullnessChecker.java:7: error: [argument.type.incompatible]"
+    private static def FAILS_UNITS_CHECKER = "FailsUnitsChecker.java:9: error: [assignment.type.incompatible]"
   }
 }

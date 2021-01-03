@@ -6,7 +6,7 @@
 
 This plugin configures `JavaCompile` tasks to use the [Checker Framework](https://checkerframework.org).
 
-## Version Compatibility Versions
+## Version Compatibility
 | Plugin Version | Checker Framework | Android Gradle Plugin |
 | --- | --- | --- |
 | 0.2.2 | 2.4.0 | 3.2.1 |

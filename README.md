@@ -1,7 +1,7 @@
 # Gradle Checker Framework Plugin
 
 [![License](https://img.shields.io/badge/license-apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://travis-ci.org/jaredsburrows/gradle-checker-framework-plugin.svg?branch=master)](https://travis-ci.org/jaredsburrows/gradle-checker-framework-plugin)
+[![Build](https://github.com/jaredsburrows/gradle-checker-framework-plugin/workflows/build/badge.svg)](https://github.com/jaredsburrows/gradle-checker-framework-plugin/actions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
 This plugin configures `JavaCompile` tasks to use the [Checker Framework](https://checkerframework.org).
@@ -22,7 +22,7 @@ buildscript {
 
 apply plugin: 'com.jaredsburrows.checkerframework'
 ```
-Release versions are available in the [JFrog Bintray repository](https://jcenter.bintray.com/).
+Release versions are available in the [JFrog Bintray repository](https://jcenter.bintray.com/com/jaredsburrows/gradle-checker-framework-plugin/).
 
 **Snapshot:**
 ```groovy
@@ -38,7 +38,7 @@ buildscript {
 
 apply plugin: 'com.jaredsburrows.checkerframework'
 ```
-Snapshot versions are available in the [JFrog Artifactory repository](https://oss.jfrog.org/artifactory/libs-snapshot/).
+Snapshot versions are available in the [JFrog Artifactory repository](https://oss.jfrog.org/artifactory/libs-snapshot/com/jaredsburrows/gradle-checker-framework-plugin/).
 
 ## Configuration
 

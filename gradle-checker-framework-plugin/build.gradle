@@ -1,0 +1,28 @@
+plugins {
+  alias(libs.plugins.maven.publish)
+  alias(libs.plugins.plugin.publish)
+  alias(libs.plugins.versions)
+  id 'java-gradle-plugin'
+  id 'java-library'
+  id 'groovy'
+}
+
+dependencies {
+  compileOnly gradleApi()
+
+  implementation localGroovy()
+
+  testImplementation localGroovy()
+  testImplementation gradleTestKit()
+  testImplementation libs.android.plugin
+  testImplementation libs.spock, { exclude module: 'groovy-all' } // Use localGroovy()
+}
+
+gradlePlugin {
+  plugins {
+    licensePlugin {
+      id = PLUGIN_NAME
+      implementationClass = PLUGIN_NAME_CLASS
+    }
+  }
+}

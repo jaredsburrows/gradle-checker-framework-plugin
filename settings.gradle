@@ -1,12 +1,32 @@
-plugins {
-  id "com.gradle.enterprise" version "3.4.1"
+pluginManagement {
+  repositories {
+    google()
+    gradlePluginPortal()
+    mavenCentral()
+  }
 }
 
-rootProject.name = 'gradle-checker-framework-plugin'
+plugins {
+  id 'com.gradle.enterprise' version '3.10'
+}
+
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+  repositories {
+    google()
+    gradlePluginPortal()
+    mavenCentral()
+  }
+}
 
 gradleEnterprise {
   buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+    publishAlways()
   }
 }
+rootProject.name = 'gradle-checker-framework-plugin'
+
+include ':gradle-checker-framework-plugin'

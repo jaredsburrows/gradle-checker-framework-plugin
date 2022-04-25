@@ -16,7 +16,8 @@ final class CheckerPluginSpec extends Specification {
     '4.9',
     '4.10',
     '5.0',
-    '6.0'
+    '6.0',
+    '7.4.2',
   ]
 
   def "setup"() {
@@ -33,7 +34,7 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          jcenter()
+          mavenCentral()
           google()
         }
       """.stripIndent().trim()
@@ -61,7 +62,7 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          jcenter()
+          mavenCentral()
           google()
         }
       """.stripIndent().trim()
@@ -90,7 +91,7 @@ final class CheckerPluginSpec extends Specification {
         }
 
         repositories {
-          jcenter()
+          mavenCentral()
           google()
         }
       """.stripIndent().trim()

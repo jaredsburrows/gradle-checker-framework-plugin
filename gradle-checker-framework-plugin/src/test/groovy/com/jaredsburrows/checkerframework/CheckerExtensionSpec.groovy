@@ -174,7 +174,7 @@ final class CheckerExtensionSpec extends Specification {
     }
 
     repositories {
-      jcenter()
+      mavenCentral()
       google()
     }
 

@@ -1,7 +1,7 @@
 # Gradle Checker Framework Plugin
 
-[![License](https://img.shields.io/badge/license-apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build](https://github.com/jaredsburrows/gradle-checker-framework-plugin/workflows/build/badge.svg)](https://github.com/jaredsburrows/gradle-checker-framework-plugin/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build](https://github.com/jaredsburrows/gradle-checker-framework-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/jaredsburrows/gradle-checker-framework-plugin/actions/workflows/build.yml)
 [![Twitter Follow](https://img.shields.io/twitter/follow/jaredsburrows.svg?style=social)](https://twitter.com/jaredsburrows)
 
 This plugin configures `JavaCompile` tasks to use the [Checker Framework](https://checkerframework.org).

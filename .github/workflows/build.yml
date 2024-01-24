@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew clean build jar docsJar sourcesJar testsJar reportsZip generatePomFileForMavenPublication -s --scan
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4.2.0
+        uses: actions/upload-artifact@v4.3.0
         if: always()
         with:
           name: gradle-checker-framework-plugin-${{ github.workflow }}-${{ github.run_id }}
